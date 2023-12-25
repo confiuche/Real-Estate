@@ -1,9 +1,11 @@
 import express from "express"
 import dotenv from "dotenv"
 import userRoute from "./routes/userRoutes.js";
+import { database } from "./config/dBconnect.js";
 
 dotenv.config();
 const app = express();
+database()
 
 app.use(express.json())
 
