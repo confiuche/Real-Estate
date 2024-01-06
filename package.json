@@ -1,7 +1,7 @@
 {
   "name": "real-estate",
   "version": "1.0.0",
-  "description": "cargo build-up, stack pallet and cargo invertory",
+  "description": "The Real Estate is a platform for online marketing for property owner/agent to list their properties such as apartment, lands for rents, hire sale",
   "main": "app.js",
   "type": "module",
   "scripts": {
