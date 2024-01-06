@@ -1,6 +1,6 @@
 import User from "../model/userModel.js";
 import AppError from "../utils/AppErr.js";
-
+import bcrypt from "bcrypt"
 
 //create account
 // export const createUserCtr = async(req,res) => {
@@ -25,11 +25,15 @@ try {
     if(foundUser){
         return next(AppError(`${foundUser} already `,409))
     }else{
+        //hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+
         const user = await User.create({
             firstname,
             lastname,
             email,
-            password
+            password: hashPassword,
         })
 
     res.json({
@@ -57,7 +61,7 @@ export const userLoginCtrl = async(req,res,next) => {
         }
 
         //get password
-        const isPasswordFound = await User.findOne({password})
+        const isPasswordFound = await bcrypt.compare(password, isUserFound.password)
 
         if(!isPasswordFound){
             return next(AppError("Wrong login credential", 401))
