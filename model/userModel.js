@@ -37,8 +37,8 @@ const userSchema = new mongoose.Schema({
     ],
     lists: [
         {
-            type: mongoose.Schema.Type.ObjectId,
-            ref: List
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "List"
         },
     ],
     isBlocked: {
