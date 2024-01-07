@@ -1,6 +1,12 @@
 import User from "../model/userModel.js";
 import AppError from "../utils/AppErr.js";
 import bcrypt from "bcrypt"
+import generateToken from "../utils/generateToken.js";
+import { obtainTokenFromHeader } from "../utils/obtainTokenFromHeader.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv"
+
+dotenv.config()
 
 //create account
 // export const createUserCtr = async(req,res) => {
@@ -23,7 +29,7 @@ try {
     const foundUser = await User.findOne({email});
 
     if(foundUser){
-        return next(AppError(`${foundUser} already `,409))
+        return next(AppError("User already exist",409))
     }else{
         //hash password
         const salt = await bcrypt.genSalt(10);
@@ -49,7 +55,7 @@ try {
 
 
 //Login user
-export const userLoginCtrl = async(req,res,next) => {
+export const userLoginCtrl = async(req, res, next) => {
     const {email, password} = req.body;
 
     try {
@@ -72,7 +78,8 @@ export const userLoginCtrl = async(req,res,next) => {
             data:{
                 firstname: isUserFound.firstname,
                 lastname:isUserFound.lastname,
-                email: isUserFound.email
+                email: isUserFound.email,
+                token:generateToken(isUserFound._id)
             }
         })
 
@@ -80,3 +87,43 @@ export const userLoginCtrl = async(req,res,next) => {
         next(AppError(error.message))
     }
 }
+
+
+export const profile = async(req,res,next) => {
+    //const userid = req.params.id;
+    //console.log(req.headers);
+    //console.log(userid);
+
+    try {
+        const token = obtainTokenFromHeader(req)
+        console.log(token);
+
+        const foundUser = await User.findById(req.userAuth)
+        
+    if(!foundUser){
+        return next(AppError("user not found", 404))
+    }
+
+        res.json({
+            status:"success",
+            data: foundUser
+        })
+    } catch (error) {
+        next(AppError(error.message));
+    }
+}
+
+
+
+// display all users
+export const displayAllController = async(req,res,next)=>{
+    try{
+        const users = await User.find({});
+        res.json({
+            status:"success",
+            data:users
+    })
+    } catch(error){
+        next(AppError(error.message));
+    }
+  }
