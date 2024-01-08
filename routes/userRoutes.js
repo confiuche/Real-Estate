@@ -4,6 +4,7 @@ import {
     displayAllController, 
     forgetPasswordCtr, 
     profile, 
+    resetPasswordCtr, 
     userLoginCtrl 
 } from "../controller/userController.js";
 import { isLogin } from "../middlewear/isLogin.js";
@@ -20,5 +21,7 @@ userRoute.get("/profile", isLogin, profile)
 userRoute.get("",isLogin,displayAllController);
 //forgetpassword
 userRoute.post("/forget-password", forgetPasswordCtr);
+//reset password
+userRoute.post("/reset-password", resetPasswordCtr)
 
 export default userRoute;
