@@ -2,6 +2,7 @@ import express from "express";
 import { 
     createUserCtr, 
     displayAllController, 
+    forgetPasswordCtr, 
     profile, 
     userLoginCtrl 
 } from "../controller/userController.js";
@@ -15,8 +16,9 @@ userRoute.post("/create", createUserCtr);
 userRoute.post("/login", userLoginCtrl);
 //profile
 userRoute.get("/profile", isLogin, profile)
-//userRoute.get("/:id",isLogin , profile)
 //get users
 userRoute.get("",isLogin,displayAllController);
+//forgetpassword
+userRoute.post("/forget-password", forgetPasswordCtr);
 
 export default userRoute;
